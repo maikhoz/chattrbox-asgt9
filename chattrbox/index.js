@@ -2,6 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var extract = require('./extract');
 var wss = require('./websockets-server');
+var mime = require('mime');
 
 var handleError = function(err, res) {
     res.writeHead(404);
@@ -18,6 +19,8 @@ var server = http.createServer(function(req, res) {
             handleError(err, res);
             return;
         } else {
+            var contentType = mime.lookup(filePath);
+            res.setHeader('Content-Type', contentType);
             res.end(data);
         }
     });
